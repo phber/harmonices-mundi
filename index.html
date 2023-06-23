@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+
+<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+<script src="http://unpkg.com/tone"></script>
+<script type="text/javascript" src="Tonejs-Instruments.js"></script>
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.153/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.153/examples/jsm/"
+    }
+  }
+</script>
+	</head>
+	<body>
+		<script type="module" src="main.js"></script>
+		<script type="module" src="./lib/Planet.js"></script>
+		<script type="module" src="./lib/Rotation.js"></script>
+		<script type="module" src="./lib/SceneInit.js"></script><button id="tunebtn">Play Notes</button>
+	</body>
+</html>
