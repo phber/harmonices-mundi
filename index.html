@@ -2,12 +2,51 @@
 <html>
 	<head lang="en">
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>Solarsounds</title>
 		<style>
-			body { margin: 0; }
+			body { 
+				margin: 0; 
+				font-family: "Lucida Console", "Courier New", monospace;
+			}
+			.ui {
+				position: absolute;
+			}
+			#date {
+				color: white;
+				bottom: 0;
+				right: 0;
+			}
+			#tunebtn {
+				position: absolute;
+				top: calc(50% - 25px);
+				left: calc(50% - 50px);
+				width: 100px;
+				height: 100px;
+				display: block;
+				border: 2px solid #fff;
+				border-radius: 50%;
+				padding: 0;
+				margin: 0 auto;
+				user-select: none;
+				background-color: rgba(0, 0, 0, 0.6);
+				transition: background-color 0.5s ease;
+			&:after {
+				position: absolute;
+				top: calc(50% - 25px);
+				left: calc(50% - 14px);
+				display: block;
+				content: '';
+				box-sizing: border-box;
+				border-color: transparent transparent transparent #fff;
+				border-style: solid;
+				border-width: 26px 0 26px 40px;
+			}
+			&:hover {
+				background-color: rgba(0, 33, 66, 0.9);
+			}
+	}
 		</style>
 
-<script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
 <script src="http://unpkg.com/tone"></script>
 <script type="importmap">
   {
@@ -19,9 +58,10 @@
 </script>
 	</head>
 	<body>
+		<div id="date" class="ui">2023-01-01</div>
+		<div id="tunebtn"></div></div>
 		<script type="module" src="main.js"></script>
 		<script type="module" src="./lib/Planet.js"></script>
-		<script type="module" src="./lib/Rotation.js"></script>
-		<script type="module" src="./lib/SceneInit.js"></script><button id="tunebtn">Play Notes</button>
+		<script type="module" src="./lib/SceneInit.js"></script>
 	</body>
 </html>

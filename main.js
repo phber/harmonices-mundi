@@ -1,20 +1,56 @@
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit.js";
 import Planet from "./lib/Planet.js";
-import Rotation from "./lib/Rotation.js";
-//import * as dat from './dat.gui.module.js';
 import data from './data4.json' assert { type: 'json' };
+import * as dat from './dat.gui.module.js';
 
+var playbtn = document.getElementById('tunebtn');
+playbtn.addEventListener('click', () => startanimation(), {passive: true});
 
-document.querySelector('button')?.addEventListener('click', async () => {
-	await Tone.start();
-	console.log('audio is ready');
-  animate();
-})
-// TODO: Understand this code later.
+document.addEventListener("visibilitychange", function() {
+  if (document.hidden){
+      Tone.Master.mute = true;
+  } else {
+      Tone.Master.mute = false;
+  }
+});
+
 let solarscene = new SceneInit();
 solarscene.initScene();
 solarscene.animate();
+
+const gui = new dat.GUI();
+
+// Add stars
+const particlesGeometry = new THREE.BufferGeometry(); // Geometry for the stars
+const particlesCount = 15000; // number of particles to be created
+
+const vertices = new Float32Array(particlesCount); // Float32Array is an array of 32-bit floats. This is used to represent an array of vertices. (we have 3 values for each vertex - coordinates x, y, z)
+
+// Loop through all the vertices and set their random position
+for (let i = 0; i < particlesCount; i++) {
+  vertices[i] = (Math.random() - 0.5) * 10000; // -0.5 to get the range from -0.5 to 0.5 than * 100 to get a range from -50 to 50
+}
+
+particlesGeometry.setAttribute(
+  'position',
+  new THREE.BufferAttribute(vertices, 3) // 3 values for each vertex (x, y, z)
+  // Check the documentation for more info about this.
+);
+
+// Texture
+const textureLoader = new THREE.TextureLoader();
+const particleTexture = textureLoader.load('./public/star.png'); // Add a texture to the particles
+
+// Material
+const particlesMaterial = new THREE.PointsMaterial({
+  map: particleTexture, // Texture
+  size: 0.5, // Size of the particles
+  sizeAttenuation: true, // size of the particle will be smaller as it gets further away from the camera, and if it's closer to the camera, it will be bigger
+});
+
+const stars = new THREE.Points(particlesGeometry, particlesMaterial);
+solarscene.scene.add(stars);
 
 const sunGeometry = new THREE.SphereGeometry(30);
 const sunTexture = new THREE.TextureLoader().load("./public/sun.jpeg");
@@ -24,74 +60,86 @@ const solarSystem = new THREE.Group();
 solarSystem.add(sunMesh);
 solarscene.scene.add(solarSystem);
 
-const mercury = new   Planet('mercury', 3, "./public/mercury.jpg", 'A6', 1.4);
-mercury.notes = ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5'];
+const mercury = new Planet('mercury', 3, "./public/mercury.jpg", 'A6', 0.4, 0.02, 'green');
 const mercuryMesh = mercury.getMesh();
 
-const venus = new Planet('venus', 8, "./public/venus.jpeg", 'F5', 1.7);
-venus.notes = ['E5'];
+const venus = new Planet('venus', 8, "./public/venus.jpeg", 'F5', 0.7, 0.05, 'teal');
 const venusMesh = venus.getMesh();
 
-const earth = new Planet('earth', 9, "./public/earth.jpeg", '', 0);
+const earth = new Planet('earth', 9, "./public/earth.jpeg", '', 1, 1, 'red');
 const earthMesh = earth.getMesh();
-earth.notes = ['G4', 'G#4'];
 
-const mars = new Planet('mars', 4, "./public/mars.jpeg", 'D#6', 2.7);
+const mars = new Planet('mars', 4, "./public/mars.jpeg", 'D#6', 1.52, 0.29, 'yellow');
 const marsMesh = mars.getMesh();
-mars.notes = ['F2', 'G3', 'A3', 'A#3', 'C3'];
 
-const saturn = new Planet('saturn', 83, "./public/mars.jpeg", 'C#2', 11);
-const saturnMesh = saturn.getMesh();
-saturn.notes = ['G2', 'A2', 'A2'];
-
-const jupiter = new Planet('jupiter', 100, "./public/mars.jpeg", 'A#1',61);
+const jupiter = new Planet('jupiter', 100, "./public/jupiter.jpg", 'A#1', 5.2, 0.76, 'pink');
 const jupiterMesh = jupiter.getMesh();
-jupiter.notes = ['G2', 'A2', 'A#2'];
 
 
+const saturn = new Planet('saturn', 83, "./public/saturn.jpg", 'C#2', 9.6, 0.88, 'orange');
+const saturnMesh = saturn.getMesh();
 
-const planets = [mercury, venus, earth, mars, saturn, jupiter];
-solarSystem.add(mercuryMesh, marsMesh, earthMesh, venusMesh, saturnMesh, jupiterMesh);
+const uranus = new Planet('uranus', 36, "./public/uranus.jpg", 'E3', 19.2, 0.77, 'purple');
+const uranusMesh = uranus.getMesh();
 
-var distscale = 200;
-var i = 0;
+const neptune = new Planet('neptune', 35, "./public/neptune.jpg", 'F3', 30, 0.7, 'darkred');
+const neptuneMesh = neptune.getMesh();
+
+const planets = [mercury, venus, earth, mars, saturn, jupiter, uranus, neptune];
+solarSystem.add(mercuryMesh, marsMesh, earthMesh, venusMesh, saturnMesh, jupiterMesh, uranusMesh, neptuneMesh);
+
+async function startanimation() {
+	await Tone.start();
+  Tone.Master.volume.value = -20;
+  console.log('Tone.js audio started.');
+  playbtn.style.display = 'none';
+  var i = 0;
+  for (const p of planets){
+    if (p.pitch)
+      p.instr.triggerAttack(p.pitch, (i+1)*0.3, 1);
+    i += 1;
+  } 
+  animate();
+}   
+
+// Start animation 
+
+var distscale = 150;
+var i = 0; // Array index
 var clock = new THREE.Clock();
-var passed = 0;
+var passed = 0; // Passed time since last i+1
+var date = new Date(2023, 1, 1);
+var controls = new function() { // Dat GUI controls
+  this.speed = 30; 
+}
+gui.add(controls, 'speed', 1, 100).name('Days per second');
 const animate = () => {
   sunMesh.rotation.y += 0.01;
   var delta = clock.getDelta();
   for (const p of planets){
-    var name = p.name;
-    if (!name) continue
-    
-    var vel = Math.round(data[name].vel[i]);
-    if (name != 'earth') {
+    p.getMesh().position.x = data[p.name].x[i]*distscale;
+    p.getMesh().position.y = data[p.name].y[i]*distscale;
+    p.getMesh().position.z = data[p.name].z[i]*distscale;
+    if (p.name == 'earth')
+      continue; 
+    p.instr.volume.value = - 20 - data[p.name].dist_norm[i] * 40;
+    p.vibrato.frequency.value = data[p.name].vel_norm[i]*10;
 
-    p.instr.volume.value = - data[name].dist_norm[i] * 60;
-
-    }
-  if (p.passed >= p.dist && p.pitch)
-{
-  const now = Tone.now();
-  p.instr.triggerAttackRelease(p.pitch, p.dist, now, p.radius/100);
-  p.spriteScale = p.radius*5;
-  p.passed = 0;
-}
-else p.passed += delta;
-  p.getMesh().position.x = data[name].x[i]*distscale;
-  p.getMesh().position.y = data[name].y[i]*distscale;
-  p.getMesh().position.z = data[name].z[i]*distscale;
-  if (p.spriteScale > 0)
-  p.spriteScale -= p.radius/5;
-  p.sprite.scale.set(p.spriteScale, p.spriteScale, 1);
-
+    p.spriteScale = 10*p.radius*(1-data[p.name].dist_norm[i]);
+    p.sprite.scale.set(p.spriteScale, p.spriteScale, 1);
   }
-  
-  i += 1
-  if (i==600) i=0;
-
+  passed += delta;
+  if (passed > 1/controls.speed){ 
+    i += 1;
+    passed = 0;
+    date.setDate(date.getDate() + 1);
+  }
+  if (i == data['mercury'].x.length - 1){ 
+    i = 0;
+    date.setDate(new Date(2023, 1, 1));
+  }
+  document.getElementById("date").innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
   requestAnimationFrame(animate);
-  
 };
 
 
