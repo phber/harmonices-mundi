@@ -60,29 +60,29 @@ const solarSystem = new THREE.Group();
 solarSystem.add(sunMesh);
 solarscene.scene.add(solarSystem);
 
-const mercury = new Planet('mercury', 3, "./public/mercury.jpg", 'A6', 0.4, 0.02, 'green');
+const mercury = new Planet('mercury', 3, "./public/mercury.jpg", 'A6', 0.4, 0.02, 'royalblue');
 const mercuryMesh = mercury.getMesh();
 
-const venus = new Planet('venus', 8, "./public/venus.jpeg", 'F5', 0.7, 0.05, 'teal');
+const venus = new Planet('venus', 8, "./public/venus.jpeg", 'F5', 0.7, 0.05, 'seagreen');
 const venusMesh = venus.getMesh();
 
-const earth = new Planet('earth', 9, "./public/earth.jpeg", '', 1, 1, 'red');
+const earth = new Planet('earth', 9, "./public/earth.jpeg", '', 1, 1, '');
 const earthMesh = earth.getMesh();
 
-const mars = new Planet('mars', 4, "./public/mars.jpeg", 'D#6', 1.52, 0.29, 'yellow');
+const mars = new Planet('mars', 4, "./public/mars.jpeg", 'D#6', 1.52, 0.29, 'crimson');
 const marsMesh = mars.getMesh();
 
 const jupiter = new Planet('jupiter', 100, "./public/jupiter.jpg", 'A#1', 5.2, 0.76, 'pink');
 const jupiterMesh = jupiter.getMesh();
 
 
-const saturn = new Planet('saturn', 83, "./public/saturn.jpg", 'C#2', 9.6, 0.88, 'orange');
+const saturn = new Planet('saturn', 83, "./public/saturn.jpg", 'C#2', 9.6, 0.88, 'peru');
 const saturnMesh = saturn.getMesh();
 
-const uranus = new Planet('uranus', 36, "./public/uranus.jpg", 'E3', 19.2, 0.77, 'purple');
+const uranus = new Planet('uranus', 36, "./public/uranus.jpg", 'E3', 19.2, 0.77, 'darkseagreen');
 const uranusMesh = uranus.getMesh();
 
-const neptune = new Planet('neptune', 35, "./public/neptune.jpg", 'F3', 30, 0.7, 'darkred');
+const neptune = new Planet('neptune', 35, "./public/neptune.jpg", 'F3', 30, 0.7, 'lightskyblue');
 const neptuneMesh = neptune.getMesh();
 
 const planets = [mercury, venus, earth, mars, saturn, jupiter, uranus, neptune];
@@ -104,7 +104,7 @@ async function startanimation() {
 
 // Start animation 
 
-var distscale = 150;
+var distscale = 150; // Visual distance between planets
 var i = 0; // Array index
 var clock = new THREE.Clock();
 var passed = 0; // Passed time since last i+1
@@ -112,7 +112,7 @@ var date = new Date(2023, 1, 1);
 var controls = new function() { // Dat GUI controls
   this.speed = 30; 
 }
-gui.add(controls, 'speed', 1, 100).name('Days per second');
+gui.add(controls, 'speed', 10, 100).name('Days per second');
 const animate = () => {
   sunMesh.rotation.y += 0.01;
   var delta = clock.getDelta();
@@ -122,21 +122,21 @@ const animate = () => {
     p.getMesh().position.z = data[p.name].z[i]*distscale;
     if (p.name == 'earth')
       continue; 
-    p.instr.volume.value = - 20 - data[p.name].dist_norm[i] * 40;
+    p.instr.volume.value = - data[p.name].dist_norm[i] * 30;
     p.vibrato.frequency.value = data[p.name].vel_norm[i]*10;
 
     p.spriteScale = 10*p.radius*(1-data[p.name].dist_norm[i]);
     p.sprite.scale.set(p.spriteScale, p.spriteScale, 1);
   }
   passed += delta;
-  if (passed > 1/controls.speed){ 
+  if (passed >= 1/controls.speed){ 
     i += 1;
     passed = 0;
     date.setDate(date.getDate() + 1);
   }
   if (i == data['mercury'].x.length - 1){ 
     i = 0;
-    date.setDate(new Date(2023, 1, 1));
+    date = new Date(2023, 1, 1);
   }
   document.getElementById("date").innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
   requestAnimationFrame(animate);
