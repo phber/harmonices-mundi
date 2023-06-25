@@ -95,8 +95,8 @@ const neptuneMesh = neptune.getMesh();
 const planets = [mercury, venus, earth, mars, saturn, jupiter, uranus, neptune];
 solarSystem.add(mercuryMesh, marsMesh, earthMesh, venusMesh, saturnMesh, jupiterMesh, uranusMesh, neptuneMesh);
 
-async function startanimation() {
-	await Tone.start();
+function startanimation() {
+	Tone.start();
   Tone.Master.volume.value = -20;
   console.log('Tone.js audio started.');
   playbtn.style.display = 'none';
