@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit.js";
 import Planet from "./lib/Planet.js";
-import data from './data4.json' assert { type: 'json' };
+import data from './data4.json';
 import * as dat from './dat.gui.module.js';
 
 var playbtn = document.getElementById('tunebtn');
