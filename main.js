@@ -103,7 +103,7 @@ function startanimation() {
   var i = 0;
   for (const p of planets){
     if (p.pitch)
-      p.instr.triggerAttack(p.pitch, (i+1)*0.3, 1);
+      p.instr.triggerAttack(p.pitch, (i+1)*0.6, 1);
     i += 1;
   } 
   animate();
