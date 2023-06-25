@@ -1,8 +1,15 @@
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit.js";
 import Planet from "./lib/Planet.js";
-import data from './data4.json';
+//import data from './public/planet_data.json' assert { type: 'json' };
 import * as dat from './dat.gui.module.js';
+
+async function getJSON() {
+  const response = await fetch("./public/data.json");
+  return await response.json();
+}
+
+const data = await getJSON();
 
 var playbtn = document.getElementById('tunebtn');
 playbtn.addEventListener('click', () => startanimation(), {passive: true});
