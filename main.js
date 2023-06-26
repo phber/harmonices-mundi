@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import SceneInit from "./lib/SceneInit.js";
 import Planet from "./lib/Planet.js";
-//import data from './public/planet_data.json' assert { type: 'json' };
 import * as dat from './dat.gui.module.js';
 
 var d;
@@ -9,8 +8,7 @@ fetch("./public/data.json")
   .then(res => res.json())
   .then(data => {
     d = data;
-   });
-
+});
 
 document.addEventListener("visibilitychange", function() {
   if (document.hidden){
@@ -50,12 +48,11 @@ const particleTexture = textureLoader.load('./public/star.png'); // Add a textur
 // Material
 const particlesMaterial = new THREE.PointsMaterial({
   map: particleTexture, // Texture
-  size: 0.5, // Size of the particles
-  sizeAttenuation: true, // size of the particle will be smaller as it gets further away from the camera, and if it's closer to the camera, it will be bigger
+  size: 1, // Size of the particles
+  sizeAttenuation: false, // size of the particle will be smaller as it gets further away from the camera, and if it's closer to the camera, it will be bigger
 });
 
 const stars = new THREE.Points(particlesGeometry, particlesMaterial);
-solarscene.scene.add(stars);
 
 const sunGeometry = new THREE.SphereGeometry(150);
 const sunTexture = new THREE.TextureLoader().load("./public/sun.jpeg");
@@ -64,6 +61,7 @@ const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
 const solarSystem = new THREE.Group();
 solarSystem.add(sunMesh);
 solarscene.scene.add(solarSystem);
+solarscene.scene.add(stars);
 
 const mercury = new Planet('mercury', 3, "./public/mercury.jpg", 0.4, 0.02, 'purple', 1.5);
 const mercuryMesh = mercury.getMesh();
@@ -172,16 +170,14 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const startanimation = async () => {
   (async() => {
-          while(!window.hasOwnProperty("animate")) 
-          await new Promise(resolve => setTimeout(resolve, 500));
-  console.log("variable is defined");
-  })();    
+    while(!window.hasOwnProperty("animate")) 
+    await new Promise(resolve => setTimeout(resolve, 500));
+  })();
   Tone.start();
   Tone.Master.volume.value = -10;
-  console.log('Tone.js audio started.');
   playbtn.style.display = 'none';
   document.getElementById('loading-text').style.display = 'block';
-  await delay(1000);
+  await delay(2000);
   try {
     animate();
     document.getElementById('loading-text').style.display = 'none';
