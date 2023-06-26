@@ -14,8 +14,6 @@ fetch("./public/data.json")
   .then(() => {
     return obj;
    });
-  const response = await fetch("./public/data.json");
-  return await response.json();
 }
 
 const data = getJSON();
