@@ -6,7 +6,7 @@ import * as dat from './dat.gui.module.js';
 
 function getJSON() {
   var obj;
-fetch("./public/data.json");
+fetch("./public/data.json")
   .then(res => res.json())
   .then(data => {
     obj = data;
