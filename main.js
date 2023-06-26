@@ -4,19 +4,13 @@ import Planet from "./lib/Planet.js";
 //import data from './public/planet_data.json' assert { type: 'json' };
 import * as dat from './dat.gui.module.js';
 
-function getJSON() {
-  var obj;
+var d;
 fetch("./public/data.json")
   .then(res => res.json())
   .then(data => {
-    obj = data;
-   })
-  .then(() => {
-    return obj;
+    d = data;
    });
-}
 
-const data = getJSON();
 
 document.addEventListener("visibilitychange", function() {
   if (document.hidden){
@@ -140,10 +134,10 @@ const animate = () => {
   sunMesh.rotation.y += 0.01;
   var delta = clock.getDelta();
   for (const p of planets){
-    p.getMesh().position.x = data[p.name].x[i]*distscale;
-    p.getMesh().position.y = data[p.name].y[i]*distscale;
-    p.getMesh().position.z = data[p.name].z[i]*distscale;
-    var pidx = Math.round(data[p.name].vel_norm[i]*(p.notes.length-1));
+    p.getMesh().position.x = d[p.name].x[i]*distscale;
+    p.getMesh().position.y = d[p.name].y[i]*distscale;
+    p.getMesh().position.z = d[p.name].z[i]*distscale;
+    var pidx = Math.round(d[p.name].vel_norm[i]*(p.notes.length-1));
     if (p.index != pidx ){       
       p.instr.triggerRelease();
       p.instr.triggerAttack(p.notes[pidx], 0, Math.sqrt(p.radius)/5);
@@ -154,8 +148,8 @@ const animate = () => {
       continue;
     }
     if (p.name != 'earth'){ 
-      p.instr.volume.value = - 5 - data[p.name].dist_norm[i] * 50;
-      p.spriteScale = 10*p.radius*(1-data[p.name].dist_norm[i]);
+      p.instr.volume.value = - 5 - d[p.name].dist_norm[i] * 50;
+      p.spriteScale = 10*p.radius*(1-d[p.name].dist_norm[i]);
       p.sprite.scale.set(p.spriteScale, p.spriteScale, 1);
     }
   }
@@ -165,7 +159,7 @@ const animate = () => {
     passed = 0;
     date.setDate(date.getDate() + 1);
   }
-  if (i == data['mercury'].x.length - 1){ 
+  if (i == d['mercury'].x.length - 1){ 
     i = 0;
     date = new Date(2023, 1, 1);
   }
