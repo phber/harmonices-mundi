@@ -9,32 +9,6 @@ async function getJSON() {
   return await response.json();
 }
 
-const delay = ms => new Promise(res => setTimeout(res, ms));
-
-const startanimation = async () => {
-	Tone.start();
-  Tone.Master.volume.value = -10;
-  console.log('Tone.js audio started.');
-  playbtn.style.display = 'none';
-  document.getElementById('loading-text').style.display = 'block';
-  await delay(1000);
-  try {
-    animate();
-    document.getElementById('loading-text').style.display = 'none';
-  }
-  catch (error) {
-    console.error(error);
-    console.log("Trying to start animation again...");
-    await delay(3000);
-    animate();
-    document.getElementById('loading-text').style.display = 'none';
-  }
-};
-
-var playbtn = document.getElementById('tunebtn');
-playbtn.addEventListener('click', () => startanimation(), {passive: true});
-playbtn.style.display = 'block';
-
 const data = await getJSON();
 
 document.addEventListener("visibilitychange", function() {
@@ -191,5 +165,32 @@ const animate = () => {
   document.getElementById("date").innerHTML = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
   requestAnimationFrame(animate);
 };
+
+// Start animation
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+const startanimation = async () => {
+	Tone.start();
+  Tone.Master.volume.value = -10;
+  console.log('Tone.js audio started.');
+  playbtn.style.display = 'none';
+  document.getElementById('loading-text').style.display = 'block';
+  await delay(2000);
+  try {
+    animate();
+    document.getElementById('loading-text').style.display = 'none';
+  }
+  catch (error) {
+    console.error(error);
+    console.log("Trying to start animation again...");
+    await delay(3000);
+    animate();
+    document.getElementById('loading-text').style.display = 'none';
+  }
+};
+
+var playbtn = document.getElementById('tunebtn');
+playbtn.addEventListener('click', () => startanimation(), {passive: true});
+playbtn.style.display = 'block';
 
 
