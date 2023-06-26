@@ -4,7 +4,16 @@ import Planet from "./lib/Planet.js";
 //import data from './public/planet_data.json' assert { type: 'json' };
 import * as dat from './dat.gui.module.js';
 
-async function getJSON() {
+function getJSON() {
+  var obj;
+fetch("./public/data.json");
+  .then(res => res.json())
+  .then(data => {
+    obj = data;
+   })
+  .then(() => {
+    return obj;
+   });
   const response = await fetch("./public/data.json");
   return await response.json();
 }
