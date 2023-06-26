@@ -9,7 +9,7 @@ async function getJSON() {
   return await response.json();
 }
 
-const data = await getJSON();
+const data = getJSON();
 
 document.addEventListener("visibilitychange", function() {
   if (document.hidden){
@@ -170,12 +170,17 @@ const animate = () => {
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 const startanimation = async () => {
-	Tone.start();
+  (async() => {
+          while(!window.hasOwnProperty("animate")) 
+          await new Promise(resolve => setTimeout(resolve, 500));
+  console.log("variable is defined");
+  })();    
+  Tone.start();
   Tone.Master.volume.value = -10;
   console.log('Tone.js audio started.');
   playbtn.style.display = 'none';
   document.getElementById('loading-text').style.display = 'block';
-  await delay(2000);
+  await delay(1000);
   try {
     animate();
     document.getElementById('loading-text').style.display = 'none';
