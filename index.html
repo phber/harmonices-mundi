@@ -46,7 +46,7 @@
 				left: calc(50% - 50px);
 				width: 100px;
 				height: 100px;
-				display: block;
+				display: none;
 				border: 2px solid #fff;
 				border-radius: 50%;
 				padding: 0;
@@ -54,21 +54,33 @@
 				user-select: none;
 				background-color: rgba(0, 0, 0, 0.6);
 				transition: background-color 0.5s ease;
-			&:after {
+				&:after {
+					position: absolute;
+					top: calc(50% - 25px);
+					left: calc(50% - 14px);
+					display: block;
+					content: '';
+					box-sizing: border-box;
+					border-color: transparent transparent transparent #fff;
+					border-style: solid;
+					border-width: 26px 0 26px 40px;
+				}
+				&:hover {
+					background-color: rgba(0, 33, 66, 0.9);
+				}
+			}
+			#loading-text {
+				color: white;
+				display: none;
+			}
+			.container {
 				position: absolute;
-				top: calc(50% - 25px);
-				left: calc(50% - 14px);
-				display: block;
-				content: '';
-				box-sizing: border-box;
-				border-color: transparent transparent transparent #fff;
-				border-style: solid;
-				border-width: 26px 0 26px 40px;
+				top: 50%;
+				left: 50%;
+				-moz-transform: translateX(-50%) translateY(-50%);
+				-webkit-transform: translateX(-50%) translateY(-50%);
+				transform: translateX(-50%) translateY(-50%);
 			}
-			&:hover {
-				background-color: rgba(0, 33, 66, 0.9);
-			}
-	}
 		</style>
 <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
 <script type="importmap">
@@ -84,6 +96,7 @@
 		<div id="gitlink" class="ui"><a href="https://github.com/phber/Solarsounds.js">GitHub</a>
 		</div>
 		<div id="name" class="ui">By Philip Bergstrom, 2023</div>
+		<div id="loading-text" class ="container">Loading...</div> 
 		<div id="date" class="ui">2023-01-01</div>
 		<div id="tunebtn"></div></div>
 		<script src="./Tone.js"></script>
