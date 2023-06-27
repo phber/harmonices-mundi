@@ -79,7 +79,7 @@ earth.notes = ['G6', 'G#6', 'A6'];
 earth.sprite.scale.set(50, 50, 1);
 earth.instr.volume.value = - 20;
 
-const moon = new Planet('moon', 2, "./public/venus.jpg", 1, 0.29, 'grey', 0.72);
+const moon = new Planet('moon', 2, "./public/venus.jpeg", 1, 0.29, 'grey', 0.72);
 const moonMesh = moon.getMesh();
 moon.notes = ['G4', 'A4', 'B4', 'C4'];
 
@@ -178,17 +178,21 @@ const startanimation = async () => {
   Tone.Master.volume.value = -10;
   playbtn.style.display = 'none';
   document.getElementById('loading-text').style.display = 'block';
-  await delay(1000);
-  try {
-    animate();
-    document.getElementById('loading-text').style.display = 'none';
-  }
-  catch (error) {
-    console.error(error);
-    console.log("Trying to start animation again...");
-    await delay(3000);
-    animate();
-    document.getElementById('loading-text').style.display = 'none';
+  await delay(2000);
+  var count = 0;
+  var maxTries = 4;
+  while(true) {
+    try {
+      animate();
+      document.getElementById('loading-text').style.display = 'none';
+      break;
+    }
+    catch (error) {
+      console.error(error);
+      console.log("Trying to start animation again...");
+      await delay(2000);
+      if (++count >= maxTries) throw e;
+    }
   }
 };
 
