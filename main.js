@@ -77,8 +77,9 @@ const earth = new Planet('earth', 9, "./public/earth.jpeg", 1, 1, 'royalblue', 1
 const earthMesh = earth.getMesh();
 earth.notes = ['G6', 'G#6', 'A6'];
 earth.sprite.scale.set(50, 50, 1);
+earth.instr.volume.value = - 20;
 
-const moon = new Planet('moon', 2, "./public/uranus.jpg", 1, 0.29, 'grey', 0.72);
+const moon = new Planet('moon', 2, "./public/venus.jpg", 1, 0.29, 'grey', 0.72);
 const moonMesh = moon.getMesh();
 moon.notes = ['G4', 'A4', 'B4', 'C4'];
 
@@ -177,7 +178,7 @@ const startanimation = async () => {
   Tone.Master.volume.value = -10;
   playbtn.style.display = 'none';
   document.getElementById('loading-text').style.display = 'block';
-  await delay(2000);
+  await delay(1000);
   try {
     animate();
     document.getElementById('loading-text').style.display = 'none';
