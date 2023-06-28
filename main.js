@@ -75,9 +75,9 @@ venus.notes = ['E6', 'E6', 'E6', 'E6'];
 
 const earth = new Planet('earth', 9, "./public/earth.jpeg", 1, 1, 'royalblue', 1);
 const earthMesh = earth.getMesh();
-earth.notes = ['G6', 'G#6', 'A6'];
+earth.notes = ['G6', 'G#6'];
 earth.sprite.scale.set(50, 50, 1);
-earth.instr.volume.value = - 20;
+earth.instr.volume.value = - 30;
 
 const moon = new Planet('moon', 2, "./public/venus.jpeg", 1, 0.29, 'grey', 0.72);
 const moonMesh = moon.getMesh();
@@ -122,7 +122,6 @@ const muteFolder = gui.addFolder('Planet sounds')
 muteFolder.add(mercury, 'muted').name('Mercury');
 muteFolder.add(venus, 'muted').name('Venus');
 muteFolder.add(mars, 'muted').name('Mars');
-muteFolder.add(earth, 'muted').name('Earth');
 muteFolder.add(moon, 'muted').name('Moon');
 muteFolder.add(jupiter, 'muted').name('Jupiter');
 muteFolder.add(saturn, 'muted').name('Saturn');
