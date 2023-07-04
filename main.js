@@ -103,7 +103,7 @@ saturn.notes = ['G1', 'A1', 'B1'];
 //const neptuneMesh = neptune.getMesh();
 
 const planets = [mercury, venus, mars, saturn, jupiter, earth, moon];
-solarSystem.add(mercuryMesh, marsMesh, earthMesh, venusMesh, saturnMesh, jupiterMesh);
+solarSystem.add(mercuryMesh, marsMesh, earthMesh, venusMesh, saturnMesh, jupiterMesh, moonMesh);
 
 
 // Setup animation 
@@ -118,13 +118,38 @@ var date = new Date(2023, 1, 1);
 var controls = new function() { 
   this.speed = 30; 
 }
-const muteFolder = gui.addFolder('Planet sounds')
-muteFolder.add(mercury, 'muted').name('Mercury');
-muteFolder.add(venus, 'muted').name('Venus');
-muteFolder.add(mars, 'muted').name('Mars');
-muteFolder.add(moon, 'muted').name('Moon');
-muteFolder.add(jupiter, 'muted').name('Jupiter');
-muteFolder.add(saturn, 'muted').name('Saturn');
+var mutes = {
+  mercury: true,
+  venus: true,
+  earth: true,
+  moon: true,
+  mars: true,
+  jupiter: true,
+  saturn: true
+};
+
+function mute(planet) {
+  if (!planet.muted){
+    planet.instr.volume.value = -100;
+    planet.muted = true;
+    planet.getMesh().visible = false;
+  }
+  else {
+    planet.getMesh().visible = true;
+    planet.muted = false;
+    if(planet.name == 'earth')
+      planet.instr.volume.value = - 30;
+  }
+}
+
+const muteFolder = gui.addFolder('Mute Planets');
+muteFolder.add(mutes, 'mercury').name('Mercury').listen().onChange(function(){mute(mercury)});
+muteFolder.add(mutes, 'venus').name('Venus').listen().onChange(function(){mute(venus)});
+muteFolder.add(mutes, 'earth').name('Earth').listen().onChange(function(){mute(earth)});
+muteFolder.add(mutes, 'moon').name('Moon').listen().onChange(function(){mute(moon)});
+muteFolder.add(mutes, 'mars').name('Mars').listen().onChange(function(){mute(mars)});
+muteFolder.add(mutes, 'jupiter').name('Jupiter').listen().onChange(function(){mute(jupiter)});
+muteFolder.add(mutes, 'saturn').name('Saturn').listen().onChange(function(){mute(saturn)});
 
 gui.add(controls, 'speed', 10, 100).name('Days per second');
 
@@ -141,11 +166,7 @@ const animate = () => {
       p.instr.triggerAttack(p.notes[pidx], 0, Math.sqrt(p.radius)/5);
       p.index = pidx;
     }
-    if (p.muted){     
-      p.instr.volume.value = -100;
-      continue;
-    }
-    if (p.name != 'earth'){ 
+    if (p.name != 'earth' && !p.muted){ 
       p.instr.volume.value = - 5 - d[p.name].dist_norm[i] * 50;
       p.spriteScale = 10*p.radius*(1-d[p.name].dist_norm[i]);
       p.sprite.scale.set(p.spriteScale, p.spriteScale, 1);
@@ -177,10 +198,12 @@ const startanimation = async () => {
   Tone.Master.volume.value = -10;
   playbtn.style.display = 'none';
   document.getElementById('loading-text').style.display = 'block';
-  await delay(2000);
   var count = 0;
-  var maxTries = 4;
+  var maxTries = 10;
+  await delay(1000);
   while(true) {
+    if (typeof d == 'undefined')
+      await delay(2000);
     try {
       animate();
       document.getElementById('loading-text').style.display = 'none';
@@ -197,6 +220,8 @@ const startanimation = async () => {
 
 var playbtn = document.getElementById('tunebtn');
 playbtn.addEventListener('click', () => startanimation(), {passive: true});
-playbtn.style.display = 'block';
 
 
+document.addEventListener("DOMContentLoaded", () => {
+  playbtn.style.display = 'block';
+});
