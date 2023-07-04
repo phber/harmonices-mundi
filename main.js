@@ -32,7 +32,7 @@ const vertices = new Float32Array(particlesCount); // Float32Array is an array o
 
 // Loop through all the vertices and set their random position
 for (let i = 0; i < particlesCount; i++) {
-  vertices[i] = (Math.random() - 0.5) * 10000; // -0.5 to get the range from -0.5 to 0.5 than * 100 to get a range from -50 to 50
+  vertices[i] = (Math.random() - 0.5) * 20000; // -0.5 to get the range from -0.5 to 0.5 than * 100 to get a range from -50 to 50
 }
 
 particlesGeometry.setAttribute(
@@ -48,8 +48,9 @@ const particleTexture = textureLoader.load('./public/star.png'); // Add a textur
 // Material
 const particlesMaterial = new THREE.PointsMaterial({
   map: particleTexture, // Texture
-  size: 1, // Size of the particles
-  sizeAttenuation: false, // size of the particle will be smaller as it gets further away from the camera, and if it's closer to the camera, it will be bigger
+  size: 30, // Size of the particles
+  transparent: true,
+  sizeAttenuation: true, // size of the particle will be smaller as it gets further away from the camera, and if it's closer to the camera, it will be bigger
 });
 
 const stars = new THREE.Points(particlesGeometry, particlesMaterial);
@@ -202,8 +203,12 @@ const startanimation = async () => {
   var maxTries = 10;
   await delay(1000);
   while(true) {
+    while(true) {
     if (typeof d == 'undefined')
-      await delay(2000);
+      await delay(1000);
+    else
+      break;
+    }
     try {
       animate();
       document.getElementById('loading-text').style.display = 'none';
