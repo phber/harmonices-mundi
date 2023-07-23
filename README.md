@@ -1,6 +1,7 @@
-# Solarsounds.js 🌌🎵
+# Harmonices Mundi 
+_**(The Harmony of the World)**_
 
-Data sonification from orbit data from planets in our solar system.
+🌌🎵 Data sonification from orbit data from planets in our solar system using scales conceived by Johannes Kepler in his book [_Harmonices Mundi_](https://phber.com/curiosities/harmonices-mundi/), written in JavaScript. 
 
 ## Libraries
 
@@ -9,7 +10,7 @@ Data sonification from orbit data from planets in our solar system.
 
 ## Live Demo
 
-[https://phber.github.io/Solarsounds.js/](https://phber.github.io/Solarsounds.js/)
+[https://www.phber.com/harmonices-mundi/](https://www.phber.com/harmonices-mundi/)
 
 ## Video Demo
 
@@ -17,6 +18,6 @@ Data sonification from orbit data from planets in our solar system.
 
 ## Details
 
-[https://phber.github.io/curiosities/planet-sonification/
-](https://phber.github.io/curiosities/planet-sonification/)
+[https://phber.com/curiosities/harmonices-mundi/
+](https://phber.com/curiosities/harmonices-mundi/)
 
